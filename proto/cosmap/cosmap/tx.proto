@@ -1,0 +1,7 @@
+syntax = "proto3";
+package cosmap.cosmap;
+
+option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
+
+// Msg defines the Msg service.
+service Msg {}
