@@ -1,0 +1,9 @@
+syntax = "proto3";
+package cosmap.cosmap;
+
+option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
+
+message SystemInfo {
+  uint64 nextId = 1; 
+  
+}

@@ -1,26 +1,43 @@
 syntax = "proto3";
+
 package cosmap.cosmap;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmap/cosmap/params.proto";
+import "cosmap/cosmap/system_info.proto";
 
 option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
 
 // Query defines the gRPC querier service.
 service Query {
+  
   // Parameters queries the parameters of the module.
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+  rpc Params (QueryParamsRequest) returns (QueryParamsResponse) {
     option (google.api.http).get = "/maxper4/cosmap/cosmap/params";
+  
+  }
+  
+  // Queries a SystemInfo by index.
+  rpc SystemInfo (QueryGetSystemInfoRequest) returns (QueryGetSystemInfoResponse) {
+    option (google.api.http).get = "/maxper4/cosmap/cosmap/system_info";
+  
   }
 }
-
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
 
 // QueryParamsResponse is response type for the Query/Params RPC method.
 message QueryParamsResponse {
+  
   // params holds all the parameters of this module.
   Params params = 1 [(gogoproto.nullable) = false];
 }
+
+message QueryGetSystemInfoRequest {}
+
+message QueryGetSystemInfoResponse {
+  SystemInfo SystemInfo = 1 [(gogoproto.nullable) = false];
+}
+

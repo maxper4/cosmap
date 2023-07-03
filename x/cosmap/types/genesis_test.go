@@ -19,9 +19,12 @@ func TestGenesisState_Validate(t *testing.T) {
 			valid:    true,
 		},
 		{
-			desc:     "valid genesis state",
+			desc: "valid genesis state",
 			genState: &types.GenesisState{
 
+				SystemInfo: types.SystemInfo{
+					NextId: 41,
+				},
 				// this line is used by starport scaffolding # types/genesis/validField
 			},
 			valid: true,
@@ -38,4 +41,13 @@ func TestGenesisState_Validate(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestDefaultGenesisState_ExpectedInitialNextId(t *testing.T) {
+	require.EqualValues(t,
+		&types.GenesisState{
+			StoredGameList: []types.StoredGame{},
+			SystemInfo:     types.SystemInfo{uint64(1)},
+		},
+		types.DefaultGenesis())
 }

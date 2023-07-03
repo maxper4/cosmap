@@ -1,12 +1,16 @@
 syntax = "proto3";
+
 package cosmap.cosmap;
 
 import "gogoproto/gogo.proto";
 import "cosmap/cosmap/params.proto";
+import "cosmap/cosmap/system_info.proto";
 
 option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
 
 // GenesisState defines the cosmap module's genesis state.
 message GenesisState {
-  Params params = 1 [(gogoproto.nullable) = false];
+  Params     params     = 1 [(gogoproto.nullable) = false];
+  SystemInfo systemInfo = 2 [(gogoproto.nullable) = false];
 }
+
