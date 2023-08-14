@@ -17,6 +17,14 @@ func TestGenesis(t *testing.T) {
 		SystemInfo: types.SystemInfo{
 			NextId: 27,
 		},
+		EventsList: []types.Events{
+			{
+				Index: "0",
+			},
+			{
+				Index: "1",
+			},
+		},
 		// this line is used by starport scaffolding # genesis/test/state
 	}
 
@@ -29,5 +37,6 @@ func TestGenesis(t *testing.T) {
 	nullify.Fill(got)
 
 	require.Equal(t, genesisState.SystemInfo, got.SystemInfo)
+	require.ElementsMatch(t, genesisState.EventsList, got.EventsList)
 	// this line is used by starport scaffolding # genesis/test/assert
 }

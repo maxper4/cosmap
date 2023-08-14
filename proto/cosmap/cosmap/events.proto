@@ -1,0 +1,16 @@
+syntax = "proto3";
+package cosmap.cosmap;
+
+option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
+import "cosmap/cosmap/coordinate.proto"; 
+import "cosmap/cosmap/event_types.proto"; 
+
+message Events {
+  string index = 1; 
+  Coordinate position = 2; 
+  string sender = 3; 
+  EventTypes event = 4; 
+  uint64 timestamp = 5; 
+  
+}
+

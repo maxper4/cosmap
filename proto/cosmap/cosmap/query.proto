@@ -7,6 +7,9 @@ import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 import "cosmap/cosmap/params.proto";
 import "cosmap/cosmap/system_info.proto";
+import "cosmap/cosmap/events.proto";
+import "cosmap/cosmap/event_types.proto";
+import "cosmap/cosmap/coordinate.proto";
 
 option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
 
@@ -24,6 +27,16 @@ service Query {
     option (google.api.http).get = "/maxper4/cosmap/cosmap/system_info";
   
   }
+  
+  // Queries a list of Events items.
+  rpc Events    (QueryGetEventsRequest) returns (QueryGetEventsResponse) {
+    option (google.api.http).get = "/maxper4/cosmap/cosmap/events/{index}";
+  
+  }
+  rpc EventsAll (QueryAllEventsRequest) returns (QueryAllEventsResponse) {
+    option (google.api.http).get = "/maxper4/cosmap/cosmap/events";
+  
+  }
 }
 // QueryParamsRequest is request type for the Query/Params RPC method.
 message QueryParamsRequest {}
@@ -39,5 +52,22 @@ message QueryGetSystemInfoRequest {}
 
 message QueryGetSystemInfoResponse {
   SystemInfo SystemInfo = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryGetEventsRequest {
+  string index = 1;
+}
+
+message QueryGetEventsResponse {
+  Events events = 1 [(gogoproto.nullable) = false];
+}
+
+message QueryAllEventsRequest {
+  cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllEventsResponse {
+  repeated Events                                 events     = 1 [(gogoproto.nullable) = false];
+           cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
