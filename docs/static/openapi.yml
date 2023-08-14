@@ -46779,6 +46779,11 @@ definitions:
       timestamp:
         type: string
         format: uint64
+  cosmap.cosmap.MsgReportEventResponse:
+    type: object
+    properties:
+      eventId:
+        type: string
   cosmap.cosmap.Params:
     type: object
     description: Params defines the parameters for the module.

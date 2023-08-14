@@ -1,7 +1,23 @@
 syntax = "proto3";
+
 package cosmap.cosmap;
+
+import "cosmap/cosmap/coordinate.proto";
+import "cosmap/cosmap/event_types.proto";
 
 option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
 
 // Msg defines the Msg service.
-service Msg {}
+service Msg {
+  rpc ReportEvent (MsgReportEvent) returns (MsgReportEventResponse);
+}
+message MsgReportEvent {
+  string     creator  = 1;
+  Coordinate position = 2;
+  EventTypes event    = 3;
+}
+
+message MsgReportEventResponse {
+  string eventId = 1;
+}
+
