@@ -1,0 +1,10 @@
+syntax = "proto3";
+package cosmap.cosmap;
+
+option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
+
+message Coordinate {
+  
+  uint64 x = 1; 
+  uint64 y = 2; 
+}
