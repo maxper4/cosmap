@@ -1,0 +1,11 @@
+syntax = "proto3";
+package cosmap.cosmap;
+
+option go_package = "github.com/maxper4/cosmap/x/cosmap/types";
+
+enum EventTypes {
+  EVENT_TYPES_UNKNOWN = 0;
+  EVENT_TYPES_BOTTLING = 1;
+  EVENT_TYPES_ACCIDENT = 2;
+  EVENT_TYPES_POLICE = 3;
+}
