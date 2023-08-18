@@ -4,11 +4,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 )
 
-const MIN_COORDINATE_X = 0
-const MIN_COORDINATE_Y = 0
-const MAX_COORDINATE_X = 100
-const MAX_COORDINATE_Y = 100
-
 var (
 	ErrInvalidCoordinateX = errorsmod.Register(ModuleName, 2, "invalid coordinate x")
 	ErrInvalidCoordinateY = errorsmod.Register(ModuleName, 3, "invalid coordinate y")

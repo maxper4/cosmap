@@ -22,7 +22,7 @@ func (k msgServer) ReportEvent(goCtx context.Context, msg *types.MsgReportEvent)
 		Position:  msg.Position,
 		Sender:    msg.Creator,
 		Event:     msg.Event,
-		Timestamp: 0, // TODO: Set timestamp
+		Timestamp: uint64(ctx.BlockTime().Unix()),
 	}
 
 	err := newEvent.Validate()

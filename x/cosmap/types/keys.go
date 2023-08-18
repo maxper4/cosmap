@@ -21,3 +21,10 @@ func KeyPrefix(p string) []byte {
 const (
 	SystemInfoKey = "SystemInfo/value/"
 )
+
+const (
+	MIN_COORDINATE_X = 0
+	MIN_COORDINATE_Y = 0
+	MAX_COORDINATE_X = 100
+	MAX_COORDINATE_Y = 100
+)
