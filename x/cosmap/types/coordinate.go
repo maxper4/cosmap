@@ -4,11 +4,6 @@ import (
 	errorsmod "cosmossdk.io/errors"
 )
 
-var (
-	ErrInvalidCoordinateX = errorsmod.Register(ModuleName, 2, "invalid coordinate x")
-	ErrInvalidCoordinateY = errorsmod.Register(ModuleName, 3, "invalid coordinate y")
-)
-
 func (m *Coordinate) Validate() error {
 	if m.X < MIN_COORDINATE_X || m.X > MAX_COORDINATE_X {
 		return errorsmod.Wrapf(ErrInvalidCoordinateX, "Invalid coordinate X, it should be %d <= X <= %d, here X is: %d", MIN_COORDINATE_X, MAX_COORDINATE_X, m.X)

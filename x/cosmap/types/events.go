@@ -1,16 +1,5 @@
 package types
 
-import (
-	errorsmod "cosmossdk.io/errors"
-)
-
-var (
-	ErrNoCoordinate = errorsmod.Register(ModuleName, 4, "No coordinate provided")
-	ErrNoEvent      = errorsmod.Register(ModuleName, 5, "No event provided")
-	ErrNoSender     = errorsmod.Register(ModuleName, 6, "No sender provided")
-	ErrNoTimestamp  = errorsmod.Register(ModuleName, 7, "No timestamp provided")
-)
-
 func (e *Events) Validate() error {
 	if e.Position == nil {
 		return ErrNoCoordinate

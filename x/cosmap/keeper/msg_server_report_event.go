@@ -35,5 +35,13 @@ func (k msgServer) ReportEvent(goCtx context.Context, msg *types.MsgReportEvent)
 	systemInfo.NextId++
 	k.SetSystemInfo(ctx, systemInfo)
 
+	ctx.EventManager().EmitEvent(
+		sdk.NewEvent(types.EventRegisteredEventType,
+			sdk.NewAttribute(types.EventRegisteredEventCreator, msg.Creator),
+			sdk.NewAttribute(types.EventRegisteredEventEventIndex, newIndex),
+			sdk.NewAttribute(types.EventRegisteredEventEventType, msg.Event.EventType.String()),
+		),
+	)
+
 	return &types.MsgReportEventResponse{EventId: newIndex}, nil
 }

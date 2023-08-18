@@ -22,9 +22,17 @@ const (
 	SystemInfoKey = "SystemInfo/value/"
 )
 
+// Validation of coordinates
 const (
 	MIN_COORDINATE_X = 0
 	MIN_COORDINATE_Y = 0
 	MAX_COORDINATE_X = 100
 	MAX_COORDINATE_Y = 100
+)
+
+const (
+	EventRegisteredEventType       = "new-event"   // Indicates what event type to listen to
+	EventRegisteredEventCreator    = "creator"     // Subsidiary information
+	EventRegisteredEventEventIndex = "event-index" // What game is relevant
+	EventRegisteredEventEventType  = "type"        // The event type
 )
