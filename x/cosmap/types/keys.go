@@ -30,9 +30,15 @@ const (
 	MAX_COORDINATE_Y = 100
 )
 
+// Event Registered Event
 const (
 	EventRegisteredEventType       = "new-event"   // Indicates what event type to listen to
 	EventRegisteredEventCreator    = "creator"     // Subsidiary information
 	EventRegisteredEventEventIndex = "event-index" // What game is relevant
 	EventRegisteredEventEventType  = "type"        // The event type
+)
+
+// Gas costs
+const (
+	RegisterEventGas = 10000
 )

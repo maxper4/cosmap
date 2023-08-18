@@ -35,6 +35,8 @@ func (k msgServer) ReportEvent(goCtx context.Context, msg *types.MsgReportEvent)
 	systemInfo.NextId++
 	k.SetSystemInfo(ctx, systemInfo)
 
+	ctx.GasMeter().ConsumeGas(types.RegisterEventGas, "Register an event")
+
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(types.EventRegisteredEventType,
 			sdk.NewAttribute(types.EventRegisteredEventCreator, msg.Creator),
