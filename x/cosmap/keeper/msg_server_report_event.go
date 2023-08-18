@@ -25,10 +25,10 @@ func (k msgServer) ReportEvent(goCtx context.Context, msg *types.MsgReportEvent)
 		Timestamp: 0, // TODO: Set timestamp
 	}
 
-	// err := newEvent.Validate()
-	// if err != nil {
-	// 	return nil, err
-	// }
+	err := newEvent.Validate()
+	if err != nil {
+		return nil, err
+	}
 
 	k.SetEvents(ctx, newEvent)
 
