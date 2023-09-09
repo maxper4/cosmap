@@ -20,7 +20,7 @@ func (k msgServer) ReportEvent(goCtx context.Context, msg *types.MsgReportEvent)
 	newEvent := types.Events{
 		Index:     newIndex,
 		Position:  msg.Position,
-		Sender:    msg.Creator,
+		Sender:    msg.GetSigners()[0].String(),
 		Event:     msg.Event,
 		Timestamp: uint64(ctx.BlockTime().Unix()),
 	}
