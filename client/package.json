@@ -17,7 +17,7 @@
     },
     "homepage": "https://github.com/maxper4/cosmap#readme",
     "dependencies": {
-        "@cosmjs/stargate": "0.28.11",
+        "@cosmjs/stargate": "0.31.1",
         "protobufjs": "7.0.0"
     },
     "devDependencies": {
