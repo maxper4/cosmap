@@ -1,0 +1,17 @@
+#map {
+  background-color: grey;
+  height: 500px;
+  width: 500px;
+  margin: 0 auto;
+  text-align: start;
+}
+
+.point {
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
