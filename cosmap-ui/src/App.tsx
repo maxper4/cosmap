@@ -128,7 +128,7 @@ function App({rpcUrl} : AppProps) {
       >
         {
           allEvents.map((event, index) => (
-            <Point key={"point-" + index} x={event.position!.x} y={event.position!.y} type={event.event} index={index} setMouseHover={(value:boolean) => { setMouseHoverEvent(value); setHoveredEvent(event)}}/>
+            <Point key={"point-" + index} x={event.position!.x} y={event.position!.y} type={event.event} setMouseHover={(value:boolean) => { setMouseHoverEvent(value); setHoveredEvent(event)}}/>
           ))
         }
       </div>
