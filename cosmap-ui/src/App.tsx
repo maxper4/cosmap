@@ -28,6 +28,8 @@ function App({rpcUrl} : AppProps) {
   const [queryClient, setQueryClient] = useState<CosmapStargateClient | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [signingClient, setSigningClient] = useState<CosmapSigningStargateClient | null>(null);
+  const [mousePosition, setMousePosition] = useState<Coordinate>({ x: Long.fromNumber(0), y: Long.fromNumber(0)});
+  const [mouseHoverMap, setMouseHoverMap] = useState<boolean>(false); 
 
   const [ready, setReady] = useState<boolean>(false);
   const [loadingState, setLoadingState] = useState<string>("Initializing...");
@@ -35,7 +37,6 @@ function App({rpcUrl} : AppProps) {
   const onClickMap = async(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const x = Long.fromNumber(e.pageX - e.currentTarget.offsetLeft);
     const y = Long.fromNumber(e.pageY - e.currentTarget.offsetTop);
-    console.log("x: " + x + " y: " + y);
     const pos:Coordinate = { x, y };
     try{
       const eventId = await signingClient!.reportEvent(address!, pos, {eventType: EventTypesEnum.EVENT_TYPES_UNKNOWN}, "auto")
@@ -51,6 +52,12 @@ function App({rpcUrl} : AppProps) {
       console.log("Could not report event: " + e);
       return;
     }
+  }
+
+  const onMouseMoveMap = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const x = Long.fromNumber(e.pageX - e.currentTarget.offsetLeft);
+    const y = Long.fromNumber(e.pageY - e.currentTarget.offsetTop);
+    setMousePosition({ x, y });
   }
 
   const initClients = async() => {
@@ -111,11 +118,19 @@ function App({rpcUrl} : AppProps) {
       <header className="App-header">
         <h1> Cosmap </h1>
       </header>
-      <div id='map' onClick={(e) => onClickMap(e)}>
+      <div id='map' onClick={(e) => onClickMap(e)} onMouseMove={(e) => onMouseMoveMap(e)} onMouseEnter={(e) => setMouseHoverMap(true)}
+        onMouseLeave={(e) => setMouseHoverMap(false)}
+      >
         {
           points.map((point, index) => (
             <Point key={"point-" + index} x={point.x} y={point.y} type={"0"} index={index} />
           ))
+        }
+      </div>
+      <div id='mouse-position'>
+        {
+          mouseHoverMap &&
+          <p>Mouse position: {mousePosition.x.toString()} {mousePosition.y.toString()}</p>
         }
       </div>
     </>
