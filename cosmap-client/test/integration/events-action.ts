@@ -11,15 +11,7 @@ import _ from "../../environment"
 import { CosmapSigningStargateClient } from "../../src/cosmap_signingstargateclient"
 import { CosmapStargateClient } from "../../src/cosmap_stargateclient"
 import { CosmapExtension } from "../../src/modules/cosmap/queries"
-// import {
-//     getCapturedPos,
-//     getCreatedGameId,
-//     getCreateGameEvent,
-//     getMovePlayedEvent,
-//     getWinner,
-// } from "../../src/types/cosmap/events"
 import { typeUrlMsgReportEvent } from "../../src/types/cosmap/messages"
-//import { completeGame, GameMove, GamePiece, Player } from "../../src/types/cosmap/player"
 import { Events } from "../../src/types/generated/cosmap/cosmap/events"
 import { askFaucet } from "../../src/util/faucet"
 import { getSignerFromMnemonic } from "../../src/util/signer"

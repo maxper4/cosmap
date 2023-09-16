@@ -1,6 +1,8 @@
 import { QueryClient, StargateClient, StargateClientOptions } from "@cosmjs/stargate"
 import { Tendermint37Client } from "@cosmjs/tendermint-rpc"
 import { CosmapExtension, setupCosmapExtension } from "./modules/cosmap/queries"
+import { Events } from "./types/generated/cosmap/cosmap/events"
+import Long from "long"
 
 export class CosmapStargateClient extends StargateClient {
     public readonly cosmapQueryClient: CosmapExtension | undefined
@@ -18,5 +20,16 @@ export class CosmapStargateClient extends StargateClient {
         if (tmClient) {
             this.cosmapQueryClient = QueryClient.withExtensions(tmClient, setupCosmapExtension)
         }
+    }
+
+    public async getAllEvents():Promise<Events[]> {
+        return ( 
+            await this.cosmapQueryClient!.cosmap.getAllEvents(
+                Uint8Array.from([]),
+                Long.ZERO,
+                Long.fromNumber(20),
+                true,
+            )
+        ).events
     }
 }
