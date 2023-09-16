@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 
 import Point from './components/Point';
 import './App.css';
+import Loader from "./components/Loader"
 
 import { CosmapStargateClient } from './cosmap-client/src/cosmap_stargateclient';
 import { CosmapSigningStargateClient } from './cosmap-client/src/cosmap_signingstargateclient';
@@ -12,7 +13,7 @@ import { Coordinate } from './cosmap-client/src/types/generated/cosmap/cosmap/co
 import { cosmapChainId, getCosmapChainInfo } from './cosmap-client/src/types/cosmap/chain';
 import { GasPrice } from '@cosmjs/stargate';
 import { OfflineSigner } from '@cosmjs/proto-signing';
-import { EventTypes, EventTypesEnum } from './cosmap-client/src/types/generated/cosmap/cosmap/event_types';
+import { EventTypesEnum } from './cosmap-client/src/types/generated/cosmap/cosmap/event_types';
 
 declare global {
   interface Window extends KeplrWindow {}
@@ -28,30 +29,48 @@ function App({rpcUrl} : AppProps) {
   const [address, setAddress] = useState<string | null>(null);
   const [signingClient, setSigningClient] = useState<CosmapSigningStargateClient | null>(null);
 
+  const [ready, setReady] = useState<boolean>(false);
+  const [loadingState, setLoadingState] = useState<string>("Initializing...");
+
   const onClickMap = async(e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const x = Long.fromNumber(e.pageX - e.currentTarget.offsetLeft);
     const y = Long.fromNumber(e.pageY - e.currentTarget.offsetTop);
     console.log("x: " + x + " y: " + y);
     const pos:Coordinate = { x, y };
-    await signingClient!.reportEvent(address!, pos, {eventType: EventTypesEnum.EVENT_TYPES_UNKNOWN}, "auto")
+    try{
+      const eventId = await signingClient!.reportEvent(address!, pos, {eventType: EventTypesEnum.EVENT_TYPES_UNKNOWN}, "auto")
+      const newEvent = await queryClient!.getEventById(eventId)
+      if (newEvent == undefined) {
+        console.log("Could not find event with id " + eventId);
+        return;
+      }
+
+      setPoints([...points, newEvent.position!])
+    }
+    catch (e) {
+      console.log("Could not report event: " + e);
+      return;
+    }
   }
 
   const initClients = async() => {
-    const client = await CosmapStargateClient.connect(rpcUrl);
-    await getSigningStargateClient();
-    setQueryClient(client);
-  }
-
-  const getSigningStargateClient = async() => {
-    if (address && signingClient)
-        return {
-            address: address,
-            signingClient: signingClient,
-        }
-
+    setReady(false);
+    setLoadingState("Connecting query client...");
+    try {
+      const client = await CosmapStargateClient.connect(rpcUrl);
+      setQueryClient(client);
+      setLoadingState("Query client connected!");
+    }
+    catch (e) {
+      console.log("Could not connect to RPC: " + e);
+      setLoadingState("ERROR: Could not connect to RPC: " + e);
+      return;
+    }
+    
+    setLoadingState("Connecting signing client...")
     const { keplr } = window
     if (!keplr) {
-        alert("You need to install Keplr")
+        setLoadingState("ERROR: You need to install Keplr!")
         throw new Error("You need to install Keplr")
     }
     await keplr.experimentalSuggestChain(getCosmapChainInfo())
@@ -67,7 +86,8 @@ function App({rpcUrl} : AppProps) {
     )
     setAddress(creator)
     setSigningClient(client)
-    return { address: creator, signingClient: client }
+    setLoadingState("Signing client connected!");
+    setReady(true);
   }
 
   useEffect(() => {
@@ -84,6 +104,10 @@ function App({rpcUrl} : AppProps) {
 
   return (
     <>
+    {
+      !ready &&
+      <Loader title={loadingState} /> ||
+      <>
       <header className="App-header">
         <h1> Cosmap </h1>
       </header>
@@ -94,6 +118,8 @@ function App({rpcUrl} : AppProps) {
           ))
         }
       </div>
+    </>
+    }
     </>
   );
 }

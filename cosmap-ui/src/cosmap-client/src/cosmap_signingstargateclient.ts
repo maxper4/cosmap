@@ -17,6 +17,8 @@ import {
 } from "./types/cosmap/messages"
 import { Coordinate } from "./types/generated/cosmap/cosmap/coordinate"
 import { EventTypes } from "./types/generated/cosmap/cosmap/event_types"
+import { Log } from "@cosmjs/stargate/build/logs"
+import { getReportedEventEvent, getReportedEventId } from "./types/cosmap/events"
 
 export const cosmapDefaultRegistryTypes: ReadonlyArray<[string, GeneratedType]> = [
     ...defaultRegistryTypes,
@@ -59,7 +61,7 @@ export class CosmapSigningStargateClient extends SigningStargateClient {
         event: EventTypes,
         fee: StdFee | "auto" | number,
         memo = "",
-    ): Promise<DeliverTxResponse> {
+    ): Promise<string> {
         const reportMsg: MsgReportEventEncodeObject = {
             typeUrl: typeUrlMsgReportEvent,
             value: {
@@ -68,6 +70,8 @@ export class CosmapSigningStargateClient extends SigningStargateClient {
                 event: event,
             },
         }
-        return this.signAndBroadcast(creator, [reportMsg], fee, memo)
+        const res = await this.signAndBroadcast(creator, [reportMsg], fee, memo)
+        const logs: Log[] = JSON.parse(res.rawLog!)
+        return getReportedEventId(getReportedEventEvent(logs[0])!)
     }
 }

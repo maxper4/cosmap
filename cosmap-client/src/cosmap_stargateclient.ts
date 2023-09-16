@@ -32,4 +32,12 @@ export class CosmapStargateClient extends StargateClient {
             )
         ).events
     }
+
+    public async getEventById(id: string):Promise<Events|undefined> {
+        return ( 
+            await this.cosmapQueryClient!.cosmap.getEvent(
+                id,
+            )
+        )
+    }
 }
