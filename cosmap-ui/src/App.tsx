@@ -13,7 +13,10 @@ import { Coordinate } from './cosmap-client/src/types/generated/cosmap/cosmap/co
 import { cosmapChainId, getCosmapChainInfo } from './cosmap-client/src/types/cosmap/chain';
 import { GasPrice } from '@cosmjs/stargate';
 import { OfflineSigner } from '@cosmjs/proto-signing';
-import { EventTypesEnum } from './cosmap-client/src/types/generated/cosmap/cosmap/event_types';
+import { EventTypesEnum, eventTypesEnumToJSON } from './cosmap-client/src/types/generated/cosmap/cosmap/event_types';
+import { Events } from './cosmap-client/src/types/generated/cosmap/cosmap/events';
+import { hover } from '@testing-library/user-event/dist/hover';
+import { eventTypeToString } from './cosmap-client/src/types/cosmap/events';
 
 declare global {
   interface Window extends KeplrWindow {}
@@ -24,12 +27,14 @@ export interface AppProps {
 }
 
 function App({rpcUrl} : AppProps) {
-  const [points, setPoints] = useState<Coordinate[]>([]);
+  const [allEvents, setAllEvents] = useState<Events[]>([]);
   const [queryClient, setQueryClient] = useState<CosmapStargateClient | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [signingClient, setSigningClient] = useState<CosmapSigningStargateClient | null>(null);
   const [mousePosition, setMousePosition] = useState<Coordinate>({ x: Long.fromNumber(0), y: Long.fromNumber(0)});
   const [mouseHoverMap, setMouseHoverMap] = useState<boolean>(false); 
+  const [mouseHoverEvent, setMouseHoverEvent] = useState<boolean>(false);
+  const [hoveredEvent, setHoveredEvent] = useState<Events | null>(null);
 
   const [ready, setReady] = useState<boolean>(false);
   const [loadingState, setLoadingState] = useState<string>("Initializing...");
@@ -46,7 +51,7 @@ function App({rpcUrl} : AppProps) {
         return;
       }
 
-      setPoints([...points, newEvent.position!])
+      setAllEvents([...allEvents, newEvent!])
     }
     catch (e) {
       console.log("Could not report event: " + e);
@@ -103,8 +108,8 @@ function App({rpcUrl} : AppProps) {
 
   useEffect(() => {
     if (queryClient) {
-      queryClient.getAllEvents().then((points) => {
-        setPoints(points.map((point) => point.position!));
+      queryClient.getAllEvents().then((events) => {
+        setAllEvents(events);
       });
     }
   }, [queryClient]);
@@ -122,16 +127,28 @@ function App({rpcUrl} : AppProps) {
         onMouseLeave={(e) => setMouseHoverMap(false)}
       >
         {
-          points.map((point, index) => (
-            <Point key={"point-" + index} x={point.x} y={point.y} type={"0"} index={index} />
+          allEvents.map((event, index) => (
+            <Point key={"point-" + index} x={event.position!.x} y={event.position!.y} type={event.event} index={index} setMouseHover={(value:boolean) => { setMouseHoverEvent(value); setHoveredEvent(event)}}/>
           ))
         }
       </div>
-      <div id='mouse-position'>
+      <div>
         {
           mouseHoverMap &&
           <p>Mouse position: {mousePosition.x.toString()} {mousePosition.y.toString()}</p>
         }
+        {
+          mouseHoverEvent &&
+          <>
+          <ul>
+            <li>Id: {hoveredEvent!.index}</li>
+            <li>Type: {eventTypeToString(hoveredEvent!.event!.eventType!)}</li>
+            <li>Reported at: {hoveredEvent!.timestamp.toString()}</li>
+            <li>Creator: {hoveredEvent!.sender}</li>
+          </ul>
+          </>
+        }
+
       </div>
     </>
     }
